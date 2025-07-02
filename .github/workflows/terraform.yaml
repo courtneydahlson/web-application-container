@@ -15,7 +15,6 @@ jobs:
     - name: List files
       run: |
         ls -la
-        pwd
 
   terraform-backend-deploy:
     needs: build-test
