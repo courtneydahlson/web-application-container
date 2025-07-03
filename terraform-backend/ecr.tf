@@ -18,7 +18,7 @@ resource "aws_ecr_lifecycle_policy" "my_app_policy" {
     policy = jsonencode({
         rules = [
             {
-                rulePriority = 1
+                rulePriority = 2
                 description = "Keep only last 10 images"
                 selection = {
                     tagStatus = "any"
@@ -30,7 +30,7 @@ resource "aws_ecr_lifecycle_policy" "my_app_policy" {
                 }
             },
             {
-                rulePriority = 2
+                rulePriority = 1
                 description = "Expire images older than 14 days"
                 selection = {
                     tagStatus = "untagged"
