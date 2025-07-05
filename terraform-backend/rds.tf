@@ -62,3 +62,18 @@ resource "aws_rds_cluster_instance" "aurora_instance" {
     Name = "AuroraInstance"
   }
 }
+
+
+resource "aws_secretsmanager_secret" "rds_writer_endpoint" {
+    name = "rds-writer-endpoint"
+    description = "Stores the writer endpoint"
+}
+
+resource "aws_secretsmanager_secret_version" "rds_writer_endpoint_version" {
+    secret_id = aws_secretsmanager_secret.rds_writer_endpoint.id
+    secret_string = jsonencode({
+        endpoint = aws_rds_cluster.aurora_cluster.endpoint
+    })
+
+    depends_on = [aws_rds_cluster.aurora_cluster]
+    }
