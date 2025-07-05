@@ -72,3 +72,6 @@ jobs:
     - name: Terraform Apply
       run: terraform apply --auto-approve
       working-directory: ./terraform-backend
+  # - name: Terraform destroy
+  #   run: terraform destroy --auto-approve
+  #   working-directory: ./terraform-backend
