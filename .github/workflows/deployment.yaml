@@ -41,7 +41,7 @@ jobs:
   #     working-directory: ./terraform-backend-database
 
   build-push:
-    #needs: terraform-backend-database-deploy
+    # needs: terraform-backend-database-deploy
     runs-on: ubuntu-latest
     steps:
     - name: Clone Github repository
