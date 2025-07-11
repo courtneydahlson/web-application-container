@@ -2,4 +2,4 @@
 MYSQL_DB = "webappdb"
 secret_name = "rds/mysql"
 region_name = "us-east-1"
-endpoint_secret = "rds-writer-endpoint"
+endpoint_secret = "db-writer-endpoint"
