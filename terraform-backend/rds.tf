@@ -69,7 +69,7 @@ resource "aws_secretsmanager_secret" "db_writer_endpoint" {
     description = "Stores the writer endpoint"
 
     lifecycle {
-        prevent_destroy = true
+        prevent_destroy = false
     }
 }
 
