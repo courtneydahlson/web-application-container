@@ -64,17 +64,12 @@ resource "aws_rds_cluster_instance" "aurora_instance" {
 }
 
 
-resource "aws_secretsmanager_secret" "db_writer_endpoint" {
-    name = "db-writer-endpoint"
-    description = "Stores the writer endpoint"
-
-    lifecycle {
-        prevent_destroy = false
-    }
+data "aws_secretsmanager_secret" "db_writer_endpoint" {
+    name = "rds/endpoint"
 }
 
 resource "aws_secretsmanager_secret_version" "rds_writer_endpoint_version" {
-    secret_id = aws_secretsmanager_secret.db_writer_endpoint.id
+    secret_id = data.aws_secretsmanager_secret.db_writer_endpoint.id
     secret_string = jsonencode({
         endpoint = aws_rds_cluster.aurora_cluster.endpoint
     })

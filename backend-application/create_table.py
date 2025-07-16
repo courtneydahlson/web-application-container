@@ -26,8 +26,10 @@ def get_db_connection():
     credentials = get_secret(config.secret_name, config.region_name)
     mysql_user = credentials['username']
     mysql_password = credentials['password']
+    endpoint_credentials = get_secret(config.endpoint_secret, config.region_name)
+    mysql_host = endpoint_credentials['endpoint']
     return mysql.connector.connect(
-        host=config.MYSQL_HOST,
+        host=mysql_host,
         user=mysql_user,
         password=mysql_password,
         database=config.MYSQL_DB
