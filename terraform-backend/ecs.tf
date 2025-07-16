@@ -45,6 +45,12 @@ resource "aws_ecs_service" "flask_web_app_service" {
         assign_public_ip = false
     }
 
+    load_balancer {
+        target_group_arn = aws_lb_target_group.backend_tg.arn
+        container_name = "web-application-container"
+        container_port = 8080
+    }
+
     depends_on = [aws_lb.backend_alb, aws_lb_listener.https_listener, aws_lb_listener.http_redirect]
 }
 

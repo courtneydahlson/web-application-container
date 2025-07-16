@@ -76,6 +76,10 @@ resource "aws_instance" "table" {
   associate_public_ip_address = true
   key_name               = "EC2 Tutorial"
 
+  tags = {
+    Name = "Public EC2"
+  }
+
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   depends_on = [aws_rds_cluster.aurora_cluster]
