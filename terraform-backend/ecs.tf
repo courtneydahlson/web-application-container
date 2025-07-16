@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "flask_web_app_td" {
 
     container_definitions = jsonencode([
         {
-            name = "web_application_container",
+            name = "web-application-container",
             image = "783764614133.dkr.ecr.us-east-1.amazonaws.com/web-application-container-repo:latest",
             essential = true,
             portMappings = [
