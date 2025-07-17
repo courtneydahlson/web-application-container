@@ -35,7 +35,7 @@ resource "aws_ecs_service" "flask_web_app_service" {
     cluster = aws_ecs_cluster.main.id
     task_definition = aws_ecs_task_definition.flask_web_app_td.arn
     launch_type = "FARGATE"
-    desired_count = 1
+    desired_count = 3
 
     network_configuration {
         subnets = [
