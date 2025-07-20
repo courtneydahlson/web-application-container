@@ -118,7 +118,7 @@ jobs:
 
   terraform-frontend-deploy:
     needs:
-    - build-push
+    - terraform-backend-deploy
     runs-on: ubuntu-latest
     steps:
     - name: Clone Github repository
