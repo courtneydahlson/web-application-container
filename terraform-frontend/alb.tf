@@ -2,7 +2,7 @@
 resource "aws_security_group" "alb_frontend_sg" {
     name = "alb-frontend-sg-tf"
     description = "Allow inboud and outbound traffic"
-    vpc_id = aws_vpc.main.id
+    vpc_id = data.aws_vpc.main.id
 
     ingress {
         description = "Allow HTTP traffic from ALB"
@@ -34,7 +34,7 @@ resource "aws_lb" "frontend_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_frontend_sg.id]
-  subnets            = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+  subnets            = [data.aws_subnet.public_subnet_1.id, data.aws_subnet.public_subnet_2.id]
 }
 
 # Target Group
@@ -42,7 +42,7 @@ resource "aws_lb_target_group" "frontend_tg" {
   name     = "frontend-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = data.aws_vpc.main.id
   target_type = "ip"
   
   health_check {

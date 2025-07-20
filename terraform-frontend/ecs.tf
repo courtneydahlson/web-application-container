@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "frontend_td" {
     requires_compatibilities = ["FARGATE"]
     cpu = "256"
     memory = "512"
-    execution_role_arn = aws_iam_role.ecs_task_execution.arn
+    execution_role_arn = data.aws_iam_role.ecs_task_execution.arn
 
     container_definitions = jsonencode([
         {
@@ -25,15 +25,15 @@ resource "aws_ecs_task_definition" "frontend_td" {
 # ECS Service
 resource "aws_ecs_service" "frontend_service" {
     name = "frontend-service"
-    cluster = aws_ecs_cluster.main.id
+    cluster = data.aws_ecs_cluster.main.id
     task_definition = aws_ecs_task_definition.frontend_td.arn
     launch_type = "FARGATE"
     desired_count = 3
 
     network_configuration {
         subnets = [
-            aws_subnet.private_subnet_1.id,
-            aws_subnet.private_subnet_2.id
+            data.aws_subnet.private_subnet_1.id,
+            data.aws_subnet.private_subnet_2.id
         ]
         security_groups = [aws_security_group.ecs_sg.id]
         assign_public_ip = false
@@ -50,7 +50,7 @@ resource "aws_ecs_service" "frontend_service" {
 
 # ECS Security Group
 resource "aws_security_group" "ecs_frontend_sg" {
-    vpc_id = aws_vpc.main.id
+    vpc_id = data.aws_vpc.main.id
 
     ingress {
     from_port   = 80
