@@ -8,6 +8,7 @@ env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: web-application-container-repo
   IMAGE_TAG: latest
+  ECR_FRONTEND_REPOSITORY: frontend-container-repo
 
 jobs:
   terraform-backend-ecr-deploy:
@@ -61,7 +62,7 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build, tag, and push Docker image
+    - name: Build, tag, and push Backend Web Application Docker image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
@@ -71,7 +72,14 @@ jobs:
       working-directory: ./backend-application
     # - name: Output image URI 
     #   run: echo "Pushed image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
-
+    - name: Build, tag, and push Frontend Docker image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG
+        echo "Image pushed: $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG"
+      working-directory: ./frontend
 
   terraform-backend-deploy:
     needs:
@@ -107,3 +115,35 @@ jobs:
     # - name: Terraform destroy
     #   run: terraform destroy --auto-approve
     #   working-directory: ./terraform-backend
+
+  terraform-frontend-deploy:
+    needs:
+    - build-push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Github repository
+      uses: actions/checkout@v4
+      with:
+        ref: dev
+    - name: Installing Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.11.3"
+    - name: Setup AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform-frontend
+    - name: Terraform Validate
+      run: terraform validate
+      working-directory: ./terraform-frontend
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ./terraform-frontend
+    - name: Terraform Apply
+      run: terraform apply --auto-approve
+      working-directory: ./terraform-frontend
