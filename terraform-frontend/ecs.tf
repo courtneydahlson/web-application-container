@@ -35,7 +35,7 @@ resource "aws_ecs_service" "frontend_service" {
             data.aws_subnet.private_subnet_1.id,
             data.aws_subnet.private_subnet_2.id
         ]
-        security_groups = [aws_security_group.ecs_sg.id]
+        security_groups = [aws_security_group.ecs_frontend_sg.id]
         assign_public_ip = false
     }
 
