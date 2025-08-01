@@ -1,0 +1,5 @@
+#MYSQL_HOST = "host.docker.internal"
+MYSQL_DB = "webappdb"
+secret_name = "rds/mysql"
+region_name = "us-east-1"
+endpoint_secret = "rds/endpoint"
